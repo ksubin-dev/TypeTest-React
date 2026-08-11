@@ -1,5 +1,6 @@
 .quiz-screen {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,7 +10,8 @@
 }
 
 .quiz-screen__card {
-  width: min(100%, 560px);
+  width: 100%;
+  max-width: 560px;
   padding: 32px 28px;
   border: 1px solid #d8dee6;
   border-radius: 8px;
@@ -52,6 +54,8 @@
   font-size: 24px;
   line-height: 1.5;
   text-align: center;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .quiz-screen__answers {
@@ -72,6 +76,8 @@
   font-size: 16px;
   line-height: 1.5;
   text-align: left;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .quiz-screen__answer-button:hover {
@@ -82,4 +88,14 @@
 .quiz-screen__answer-button:focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .quiz-screen__card {
+    padding: 28px 20px;
+  }
+
+  .quiz-screen__question {
+    font-size: 22px;
+  }
 }
