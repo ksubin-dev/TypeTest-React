@@ -1,10 +1,12 @@
 import { useState } from "react";
 import StartScreen from "./components/StartScreen/StartScreen";
 import QuizScreen from "./components/QuizScreen/QuizScreen";
+import ResultScreen from "./components/ResultScreen/ResultScreen";
 import { financeTest } from "./data/financeTest";
 import type { Answer } from "./types/financeTest";
+import { calculateResult } from "./utils/resultCalculator";
 
-type Screen = "start" | "quiz" | "complete";
+type Screen = "start" | "quiz" | "result";
 
 function App() {
   const [screen, setScreen] = useState<Screen>("start");
@@ -22,25 +24,29 @@ function App() {
   }
 
   function handleAnswerSelect(answer: Answer) {
+    const nextSelectedAnswers = [...selectedAnswers, answer];
     const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
-    setSelectedAnswers((previousAnswers) => [...previousAnswers, answer]);
+    setSelectedAnswers(nextSelectedAnswers);
 
     if (isLastQuestion) {
-      setScreen("complete");
+      setScreen("result");
       return;
     }
 
     setCurrentQuestionIndex((previousIndex) => previousIndex + 1);
   }
 
-  if (screen === "complete") {
-    return (
-      <main>
-        <h1>테스트가 완료되었습니다.</h1>
-        <p>선택한 답변 {selectedAnswers.length}개가 저장되었습니다.</p>
-      </main>
-    );
+  function handleRestart() {
+    setCurrentQuestionIndex(0);
+    setSelectedAnswers([]);
+    setScreen("start");
+  }
+
+  if (screen === "result") {
+    const result = calculateResult(selectedAnswers, financeTest.results);
+
+    return <ResultScreen result={result} onRestart={handleRestart} />;
   }
 
   if (screen === "quiz" && currentQuestion) {
